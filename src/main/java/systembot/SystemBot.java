@@ -33,8 +33,7 @@ public class SystemBot {
     public static String dev_roleid = null;
     public static String serverName = "<untitled>";
     public static JSONObject data; //token, channel_id, role_id
-    public static String apiKey = "";
-    public static String apiToken = "ODk1NzMxNjM1MzQ0MDAzMTQy.YV81Fw.PIj13xIKUbr5Ty1cQoxV6nAreXg";
+    public static String apiToken = "";
     private static JSONObject alldata;
 
     private final long CDT = 300L;
@@ -49,9 +48,14 @@ public class SystemBot {
             admin_bot_channel_id = alldata.getString("admin_bot_channel_id");
             suggestion_channel_id = alldata.getString("suggestion_channel_id");
             dev_roleid = alldata.getString("dev_roleid");
+
+            if (data.has("token")) {
+                apiToken = data.getString("token");
+                System.out.println("Token set successfully");
+            }
         } catch (Exception e) {
             System.out.println("Couldn't read settings.json file.");
-            System.out.println(e.toString());
+            e.printStackTrace();
             return;
         }
 
@@ -79,12 +83,6 @@ public class SystemBot {
         } else {
             System.out.println("No server name setting detected!");
         }
-
-        if (data.has("api_key")) {
-            apiKey = data.getString("api_key");
-            System.out.println("api_key set successfully");
-        }
-
     }
 
     public static TextChannel getTextChannel(String id) {

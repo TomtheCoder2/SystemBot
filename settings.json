@@ -1,7 +1,7 @@
 {
-  "token": "ODk1NzMxNjM1MzQ0MDAzMTQy.YV81Fw.PIj13xIKUbr5Ty1cQoxV6nAreXg",
+  "token": "ODk1NzMxNjM1MzQ0MDAzMTQy.YV81Fw.JQpsrGqTn8lDo0aNsiJYJUIY_r0",
   "prefix": ";",
-  "server_name": "Online Mindustry Community",
+  "server_name": "Phoenix Network",
   "mapSubmissions_id": "881618007263150141",
   "warnings_chat_channel_id": "881300595875643452",
   "exit_roleid": "865104128690880512",
@@ -20,5 +20,5 @@
   "mvp_roleid": "674778262857187347",
   "url": "jdbc:postgresql://localhost/mindustrydata",
   "user": "postgres",
-  "password": "Nautilus2021#",
+  "password": "Nautilus2021#"
 }
