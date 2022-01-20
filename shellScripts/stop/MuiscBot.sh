@@ -1,0 +1,1 @@
+bash -c "screen -r MusicBot -X stuff $'^C'"

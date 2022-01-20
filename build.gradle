@@ -1,0 +1,59 @@
+apply plugin: "java"
+
+
+version '1.0'
+
+sourceCompatibility = 16
+
+repositories {
+    maven { url 'https://www.jitpack.io' }
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+    mavenCentral()
+}
+
+ext {
+    //the build number that this plugin is made for
+    arcVersion = 'v131'
+    mindustryVersion = 'getMapScreenshot'
+}
+
+dependencies {
+    implementation 'org.jsoup:jsoup:1.14.2'
+//    compileOnly("com.github.fuzzbuck.Mindustry:core:$mindustryVersion")
+//    compileOnly("com.github.fuzzbuck.Mindustry:server:$mindustryVersion")
+    implementation group: 'org.json', name: 'json', version: '20210307'
+    compileOnly 'org.springframework.data:spring-data-redis:2.5.4'
+    compileOnly 'redis.clients:jedis:3.6.3'
+    compileOnly('org.glassfish.jersey.core:jersey-client:3.0.2')
+//    compileOnly("redis.clients:jedis:3.2.0")
+    compileOnly('org.apache.commons:commons-pool2:2.10.0')
+
+    implementation('org.javacord:javacord:3.3.2')
+    compileOnly('javax.ws.rs:javax.ws.rs-api:2.1.1')
+    implementation("net.dv8tion:JDA:4.3.0_277")
+
+}
+
+jar {
+    version = null
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from {
+        configurations.runtimeClasspath.findAll { !it.name.endsWith('pom') }.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    doFirst {
+        manifest(({
+            if (!configurations.runtimeClasspath.isEmpty()) {
+                attributes(
+                        'Class-Path': configurations.runtimeClasspath.collect { it.toURI().toString() }.join(' '),
+                        'Main-Class': 'systembot.SystemBot')
+            }
+        } as groovy.lang.Closure<?>))
+    }
+
+}

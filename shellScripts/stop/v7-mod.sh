@@ -1,0 +1,1 @@
+bash -c "screen -r v7-mod -X stuff $'^C'"
