@@ -97,7 +97,11 @@ public class ServerCommands {
                         EmbedBuilder eb = new EmbedBuilder()
                                 .setTitle("Please select a bot first!")
                                 .setColor(Color.decode("#00ffff"));
-                        ctx.channel.sendMessage(eb);
+                        channel.sendMessage(eb).queue(message) -> {
+                            long messageId = message;
+                            message.addReaction(String '❌');
+                            message.addReaction(String '✔');
+
                         return;
                     }
                     if (ctx.args.length >= 3) {
