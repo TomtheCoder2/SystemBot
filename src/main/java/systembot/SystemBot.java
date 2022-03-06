@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import systembot.Utils.*;
+import website.Administrators;
 
 import static systembot.Utils.readJsonFile;
 
@@ -83,6 +84,8 @@ public class SystemBot {
         } else {
             System.out.println("No server name setting detected!");
         }
+
+        Administrators.init(api);
     }
 
     public static TextChannel getTextChannel(String id) {

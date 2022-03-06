@@ -1,4 +1,9 @@
-apply plugin: "java"
+plugins {
+    id 'org.springframework.boot' version '2.6.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'org.siouan.frontend' version '1.1.0'
+}
 
 
 version '1.0'
@@ -12,6 +17,19 @@ repositories {
         url 'https://m2.dv8tion.net/releases'
     }
     mavenCentral()
+    jcenter()
+    maven {
+        url 'https://repo.clojars.org'
+        name 'Clojars'
+    }
+}
+
+frontend {
+    nodeVersion = '16.13.2'
+    // See 'scripts' section in your 'package.json file'
+    cleanScript = 'run clean'
+    assembleScript = 'run assemble'
+    checkScript = 'run check'
 }
 
 ext {
@@ -21,19 +39,43 @@ ext {
 }
 
 dependencies {
-    implementation 'org.jsoup:jsoup:1.14.2'
+    implementation 'org.jsoup:jsoup:1.14.3'
 //    compileOnly("com.github.fuzzbuck.Mindustry:core:$mindustryVersion")
 //    compileOnly("com.github.fuzzbuck.Mindustry:server:$mindustryVersion")
     implementation group: 'org.json', name: 'json', version: '20210307'
-    compileOnly 'org.springframework.data:spring-data-redis:2.5.4'
-    compileOnly 'redis.clients:jedis:3.6.3'
-    compileOnly('org.glassfish.jersey.core:jersey-client:3.0.2')
-//    compileOnly("redis.clients:jedis:3.2.0")
+    compileOnly('org.glassfish.jersey.core:jersey-client:3.0.4')
     compileOnly('org.apache.commons:commons-pool2:2.10.0')
 
-    implementation('org.javacord:javacord:3.3.2')
+    implementation('org.javacord:javacord:3.4.0')
     compileOnly('javax.ws.rs:javax.ws.rs-api:2.1.1')
     implementation("net.dv8tion:JDA:4.3.0_277")
+
+
+
+    // ---------------- website- -------------
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+//    runtimeOnly 'com.h2database:h2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'com.github.eirslett:frontend-maven-plugin:1.12.1'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+    implementation 'org.postgresql:postgresql:42.3.3'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.hibernate:hibernate-java8'
+//    implementation 'org.h2database:h2'
 
 }
 

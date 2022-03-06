@@ -13,6 +13,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static systembot.SystemBot.getTextChannel;
@@ -31,6 +32,33 @@ public class ServerCommands {
         if (data.has("administrator_roleid")) {
             String adminRole = data.getString("administrator_roleid");
             String devRole = data.getString("dev_roleid");
+
+            handler.registerCommand(new RoleRestrictedCommand("alloc") {
+                {
+                    role = adminRole;
+                }
+
+                @Override
+                public void run(Context ctx) {
+                    ArrayList<byte[]> memList = new ArrayList<>();
+                    for (int j = 0; j < 1024; j++) {
+                        byte[] mem = new byte[16 * 1024 * 1204 * 64];
+                        memList.add(mem);
+                        for (int i = 0; i < mem.length; i++) {
+//                        System.out.print(m);
+                            mem[i]++;
+                        }
+                        System.out.println(j);
+                    }
+                    for (byte[] mem : memList) {
+                        for (int i = 0; i < mem.length; i++) {
+                            mem[i]++;
+                        }
+//                        System.out.println(j);
+                    }
+                    System.out.println("finished");
+                }
+            });
 
             handler.registerCommand(new RoleRestrictedCommand("accept") {
                 {
@@ -110,11 +138,11 @@ public class ServerCommands {
                         String command = "";
                         switch (ctx.args[1]) {
                             case "v7" -> {
-//                                command = "bash -c \"screen -dmr v7 -X stuff $'java -jar server-release.jar\\nhost\\n'\"";
+//                                command = "bash -c \"screen -dmr v7 -X stuff $'sh autoRestart.sh\\nhost\\n'\"";
                                 command = "sh shellScripts/start/v7.sh " + name + " " + mode;
                             }
                             case "v7-mod" -> {
-//                                command = "bash -c \"screen -dmr v7-mod -X stuff $'java -jar server-release.jar\\nhost\\n'\"";
+//                                command = "bash -c \"screen -dmr v7-mod -X stuff $'sh autoRestart.sh\\nhost\\n'\"";
                                 command = "sh shellScripts/start/v7-mod.sh " + name + " " + mode;
                             }
                             case "music" -> {
@@ -258,7 +286,7 @@ public class ServerCommands {
             }
 
             public void run(Context ctx) {
-                // screen -r v7 -X stuff $'java -jar server-release.jar\nhost\n'
+                // screen -r v7 -X stuff $'sh autoRestart.sh\nhost\n'
                 // screen -r v7 -X stuff $'^C'
                 try {
                     Process process = Runtime.getRuntime().exec("ping www.stackabuse.com");
