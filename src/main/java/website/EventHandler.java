@@ -8,13 +8,13 @@ import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-import website.entity.Admin;
+import website.entity.Staff;
 
 import static website.WebSocketConfiguration.MESSAGE_PREFIX;
 
 
 @Component
-@RepositoryEventHandler(Admin.class)
+@RepositoryEventHandler(Staff.class)
 public class EventHandler {
 
     private final SimpMessagingTemplate websocket;
@@ -28,29 +28,29 @@ public class EventHandler {
     }
 
     @HandleAfterCreate
-    public void newPlayer(Admin data) {
+    public void newPlayer(Staff data) {
         this.websocket.convertAndSend(
                 MESSAGE_PREFIX + "/newAdmin", getPath(data));
     }
 
     @HandleAfterDelete
-    public void deletePlayer(Admin data) {
+    public void deletePlayer(Staff data) {
         this.websocket.convertAndSend(
                 MESSAGE_PREFIX + "/deleteAdmin", getPath(data));
     }
 
     @HandleAfterSave
-    public void updatePlayer(Admin data) {
+    public void updatePlayer(Staff data) {
         this.websocket.convertAndSend(
                 MESSAGE_PREFIX + "/updateAdmin", getPath(data));
     }
 
     /**
-     * Take an {@link Admin} and get the URI using Spring Data REST's {@link EntityLinks}.
+     * Take an {@link Staff} and get the URI using Spring Data REST's {@link EntityLinks}.
      *
-     * @param data Admin
+     * @param data Staff
      */
-    private String getPath(Admin data) {
+    private String getPath(Staff data) {
         return this.entityLinks.linkForItemResource(data.getClass(),
                 data.getId()).toUri().getPath();
     }

@@ -1,10 +1,10 @@
 package website.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import website.entity.Admin;
+import website.entity.Staff;
 
 import java.util.List;
 
-public interface AdminRepository extends CrudRepository<Admin, Integer> {
-    List<Admin> findByName(String name);
+public interface AdminRepository extends CrudRepository<Staff, Integer> {
+    List<Staff> findByName(String name);
 }

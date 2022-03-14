@@ -85,7 +85,7 @@ public class SystemBot {
             System.out.println("No server name setting detected!");
         }
 
-        Administrators.init(api);
+//        Administrators.init(api);
     }
 
     public static TextChannel getTextChannel(String id) {

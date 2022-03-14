@@ -13,7 +13,7 @@ class App extends React.Component {
         this.setState({
             loading: true
         }, () => {
-            fetch("http://localhost:8080/admins/").then(res => res.json()).then(result => this.setState({
+            fetch("/api/staff/").then(res => res.json()).then(result => this.setState({
                 loading: false,
                 users: result
             })).catch(console.log);
@@ -31,31 +31,26 @@ class App extends React.Component {
         } = this.state;
         return (
             <React.Fragment>
-                {
-                    error ? <p>
-                        {
-                            error.message
-                        } < /p> : null} {
+                {error ? <p>
+                    {
+                        error.message
+                    } < /p> : null} {
                 users.map(user => {
                     const {
                         name,
                         avatarUrl,
-                        description
+                        description,
+                        rank
                     } = user;
                     return (
-                        // <div key={name}>
-                        //     <p>Name: {name}</p>
-                        //     <p>Email: {email}</p>
-                        //     <p>Address: {adderss}</p>
-                        //     <hr/>
-                        // </div>
                         <div className="col-xl-3 col-lg-3 col-md-3 col-sm-12">
                             <div className="testimonial_box">
-                                <figure><img className="card-img-top rounded-circle"
+                                <figure><img className="card-img-top rounded-circle pfp"
                                              src={avatarUrl}
-                                             alt="ClashGone Image"/></figure>
+                                             alt={name}/></figure>
                                 <h3><b>{name}</b></h3>
                                 <h3>{description}</h3>
+                                <h3>Rank: {rank}</h3>
                             </div>
                         </div>
                     );

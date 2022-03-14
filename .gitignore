@@ -3,3 +3,5 @@
 /build/
 /build/classes/java/main/
 ./settings.json
+/src/main/resources/springboot.p12
+springboot.p12

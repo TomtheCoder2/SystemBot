@@ -5,44 +5,43 @@ import lombok.Getter;
 import lombok.Setter;
 import org.javacord.api.entity.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "admin")
-public class Admin {
-    @Setter @Getter private @Id @GeneratedValue int id;
+public class Staff {
+    @Setter @Getter private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) int id;
     @Setter @Getter private String name;
     @Setter @Getter private String avatarUrl;
     @Setter @Getter private Long userId;
     @Setter @Getter private String description;
+    @Setter @Getter private String rank;
 
-    public Admin(String name, String url, Long id, String desc) {
+    public Staff(String name, String url, Long id, String desc) {
         this.name = name;
         avatarUrl = url;
         userId = id;
         description = desc;
     }
 
-    public Admin(User user, String desc) {
+    public Staff(User user, String desc, String rank) {
         name = user.getDiscriminatedName();
         avatarUrl = user.getAvatar().getUrl().toString();
         userId = user.getId();
         description = desc;
+        this.rank = rank;
     }
 
-    public Admin() {
+    public Staff() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Admin admin = (Admin) o;
-        return id == admin.id;
+        Staff staff = (Staff) o;
+        return id == staff.id;
     }
 
     @Override
@@ -52,11 +51,13 @@ public class Admin {
 
     @Override
     public String toString() {
-        return "Admin{" +
+        return "Staff{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", userId=" + userId +
+                ", description='" + description + '\'' +
+                ", rank='" + rank + '\'' +
                 '}';
     }
 }

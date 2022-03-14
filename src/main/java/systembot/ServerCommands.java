@@ -57,6 +57,7 @@ public class ServerCommands {
 //                        System.out.println(j);
                     }
                     System.out.println("finished");
+
                 }
             });
 
@@ -74,7 +75,7 @@ public class ServerCommands {
                     SystemBot.api.getUserById(ctx.args[1]).join().sendMessage(new EmbedBuilder()
                             .setTitle("Congratulations!")
                             .setDescription("Your Moderator application got accepted.\n" +
-                                    "Please ping or dm a Marshal (Admin) on the Phoenix-Network discord server")
+                                    "Please ping or dm a Marshal (Staff) on the Phoenix-Network discord server")
                             .setColor(new Color(0x00ff00)));
                     ctx.channel.sendMessage(new EmbedBuilder()
                             .setTitle("Successfully send message!")
