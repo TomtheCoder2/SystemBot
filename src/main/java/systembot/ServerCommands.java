@@ -3,15 +3,12 @@ package systembot;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import systembot.discordcommands.Command;
 import systembot.discordcommands.Context;
 import systembot.discordcommands.DiscordCommands;
 import systembot.discordcommands.RoleRestrictedCommand;
-import website.controller.StaffController;
-import website.entity.Staff;
-import website.repositories.AdminRepository;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -19,16 +16,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import static systembot.SystemBot.getTextChannel;
 import static systembot.SystemBot.suggestion_channel_id;
+import static systembot.Utils.printResults;
 
 @Component
 public class ServerCommands {
     private final TextChannel error_log_channel = getTextChannel("891677596117504020");
     private final JSONObject data;
-    @Autowired AdminRepository adminRepository;
+    @Value("${spring.thymeleaf.prefix}")
+    private String webRoot;
 
     public ServerCommands(JSONObject data) {
         this.data = data;
@@ -177,6 +175,7 @@ public class ServerCommands {
                 }
             });
 
+
             handler.registerCommand(new RoleRestrictedCommand("reload") {
                 {
                     help = "Reload all contents for the website.";
@@ -185,11 +184,13 @@ public class ServerCommands {
                     category = "management";
                 }
 
-                public void run(Context ctx) throws ExecutionException, InterruptedException {
-                    for (Staff staff : adminRepository.findAll()) {
-                        staff.setAvatarUrl(SystemBot.api.getUserById(staff.getUserId()).get().getAvatar().getUrl().toString());
-                        adminRepository.save(staff);
-                    }
+                public void run(Context ctx) throws IOException {
+//                    for (Staff staff : adminRepository.findAll()) {
+//                        staff.setAvatarUrl(SystemBot.api.getUserById(staff.getUserId()).get().getAvatar().getUrl().toString());
+//                        adminRepository.save(staff);
+//                    }
+                    Process process = Runtime.getRuntime().exec("cd " + webRoot + " && git pull");
+                    printResults(process, ctx);
                     ctx.channel.sendMessage(new EmbedBuilder()
                             .setTitle("Success")
                             .setDescription("Successfully updated content of the website database.")

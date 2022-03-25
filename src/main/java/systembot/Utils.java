@@ -3,12 +3,10 @@ package systembot;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import systembot.discordcommands.Context;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -75,6 +73,15 @@ public class Utils {
         }
         String bareRemain = bare.substring((int) remainProcent);
         return bareDone + bareRemain + " " + new DecimalFormat("##.00").format(remain / total * 100.0) + "%";
+    }
+
+    public static void printResults(Process process, Context ctx) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            ctx.channel.sendMessage(line);
+        }
     }
 
 
