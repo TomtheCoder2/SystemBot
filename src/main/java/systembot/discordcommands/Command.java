@@ -1,6 +1,8 @@
 package systembot.discordcommands;
 
 
+import java.util.concurrent.ExecutionException;
+
 /** Represents a command */
 public abstract class Command {
     public String name;
@@ -20,7 +22,7 @@ public abstract class Command {
      * @param ctx
      * Context
      */
-    public abstract void run(Context ctx);
+    public abstract void run(Context ctx) throws ExecutionException, InterruptedException;
 
     public boolean hasPermission(Context ctx) {
         return true;

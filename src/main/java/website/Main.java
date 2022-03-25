@@ -15,7 +15,10 @@ import systembot.SystemBot;
 public class Main {
     public static void main(String[] args) {
         // https://stackoverflow.com/questions/39632667/how-do-i-kill-the-process-currently-using-a-port-on-localhost-in-windows
-        SystemBot.main(new String[]{});
+        // netstat -ano | findstr :80
+        // taskkill /PID <PID> /F
+//        SystemBot.main(new String[]{});
         SpringApplication.run(Main.class, args);
+        SystemBot.main(new String[]{});
     }
 }

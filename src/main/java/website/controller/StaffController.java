@@ -4,18 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import systembot.SystemBot;
 import website.entity.Staff;
 import website.repositories.AdminRepository;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static systembot.SystemBot.api;
 
 @RestController
-@RequestMapping("/api/staff/")
+@RequestMapping("/api/staff")
 public class StaffController {
 
-    @Autowired AdminRepository adminRepository;
+    public static @Autowired AdminRepository adminRepository;
 
     @GetMapping
     public Iterable findAll() {

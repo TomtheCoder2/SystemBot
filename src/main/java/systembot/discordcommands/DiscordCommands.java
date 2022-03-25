@@ -26,6 +26,7 @@ public class DiscordCommands implements MessageCreateListener {
 
 
     public DiscordCommands() {
+        System.out.println("Init DiscordCommands...");
         // stuff
     }
 
@@ -64,6 +65,7 @@ public class DiscordCommands implements MessageCreateListener {
      * @param event Source event associated with the message
      */
     public void onMessageCreate(MessageCreateEvent event) {
+//        System.out.printf("%s: %s\n", event.getMessageAuthor(), event.getMessageContent());
         for (MessageCreatedListener listener : messageCreatedListenerRegistry) listener.run(event);
 
         String message = event.getMessageContent();

@@ -1,18 +1,13 @@
 package systembot;
 
 
-import org.apache.commons.logging.Log;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
-import systembot.Utils.*;
-import website.Administrators;
 
 import static systembot.Utils.readJsonFile;
 
@@ -41,6 +36,7 @@ public class SystemBot {
 
     // register event handlers and create variables in the constructor
     public static void main(String[] args) {
+        System.out.println("Start SystemBot.main...");
         Utils.init();
         try {
             data = alldata = readJsonFile("settings.json");
