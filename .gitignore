@@ -5,3 +5,5 @@
 ./settings.json
 /src/main/resources/springboot.p12
 springboot.p12
+./src/main/resources/application.properties
+./src/main/resources/application_server.properties
