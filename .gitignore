@@ -7,4 +7,3 @@
 springboot.p12
 ./src/main/resources/application.properties
 ./src/main/resources/application_server.properties
-/assets/

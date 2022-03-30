@@ -3,30 +3,26 @@ package systembot;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import systembot.discordcommands.Command;
 import systembot.discordcommands.Context;
 import systembot.discordcommands.DiscordCommands;
 import systembot.discordcommands.RoleRestrictedCommand;
+import systembot.website.entity.Staff;
 
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
-import static systembot.SystemBot.getTextChannel;
-import static systembot.SystemBot.suggestion_channel_id;
-import static systembot.Utils.printResults;
+import static systembot.SystemBot.*;
+import static systembot.Utils.getStaffByString;
 
-@Component
 public class ServerCommands {
     private final TextChannel error_log_channel = getTextChannel("891677596117504020");
     private final JSONObject data;
-    @Value("${spring.thymeleaf.prefix}")
-    private String webRoot;
 
     public ServerCommands(JSONObject data) {
         this.data = data;
@@ -37,9 +33,75 @@ public class ServerCommands {
             String adminRole = data.getString("administrator_roleid");
             String devRole = data.getString("dev_roleid");
 
+            handler.registerCommand(new RoleRestrictedCommand("staff") {
+                {
+                    role = adminRole;
+                    help = "Manage staff members on the website.";
+                    usage = "<new|update|delete|list> [name, id, userId (discordId) or discord name (with tag eg Nautilus#0100, currently doesnt work with spaces)] [rank] [description...]";
+                    category = "management";
+                }
+
+                @Override
+                public void run(Context ctx) {
+                    String op = ctx.args[1];
+                    EmbedBuilder eb = new EmbedBuilder();
+                    switch (op.toLowerCase().trim()) {
+                        case "list" -> {
+                            for (Staff staff : staffRepository.findAll()) {
+                                eb.addField(staff.getName(), staff.getDescription() +
+                                        "\n\nRank: " + staff.getRank() + "\nid: `" + staff.getId() + "`\nUser Id: `" + staff.getUserId() + "`", true);
+                            }
+                            eb.setTitle("All current staff members:");
+                        }
+                        case "delete" -> {
+                            Staff target = getStaffByString(ctx.args[2], ctx);
+                            if (target != null) {
+                                staffRepository.delete(target);
+                            } else {
+                                return;
+                            }
+                            eb.setTitle("Successfully deleted staff " + target.getName() + "!")
+                                    .setColor(new Color(0x00ff00));
+                        }
+                        case "update" -> {
+                            Staff target = getStaffByString(ctx.args[2], ctx);
+                            if (target == null) return;
+                            String rank = ctx.args[3];
+                            String desc = ctx.message.split(" ", 4)[3];
+                            eb.setTitle("Successfully updated " + target.getName() + "!")
+                                    .setColor(new Color(0x00ff00))
+                                    .addField("Old data", "**Description:** \n" + target.getDescription() + "\n\n**Rank:**\n" + target.getRank(), true);
+                            target.setRank(rank);
+                            target.setDescription(desc);
+                            staffRepository.save(target);
+                            eb.addField("New data", "**Description:** \n" + target.getDescription() + "\n\n**Rank:**\n" + target.getRank(), true);
+                        }
+                        case "new" -> {
+                            String id = ctx.args[2];
+                            String rank = ctx.args[3];
+                            String desc = ctx.message.split(" ", 4)[3];
+                            Staff newStaff;
+                            try {
+                                newStaff = new Staff(api.getUserById(id).get(), desc, rank);
+                            } catch (Exception e) {
+                                ctx.channel.sendMessage(new EmbedBuilder().setTitle("Could not find user with id `" + id + "`!")
+                                        .setColor(new Color(0xff0000)));
+                                return;
+                            }
+                            staffRepository.save(newStaff);
+                            eb.setTitle("Successfully saved " + newStaff.getName() + "!")
+                                    .setColor(new Color(0x00ff00))
+                                    .addField("Data", "**Description:** \n" + newStaff.getDescription() + "\n\n**Rank:**\n" + newStaff.getRank(), true);
+                        }
+                    }
+                    ctx.channel.sendMessage(eb);
+                }
+            });
+
             handler.registerCommand(new RoleRestrictedCommand("alloc") {
                 {
                     role = adminRole;
+                    hidden = true;
                 }
 
                 @Override
@@ -184,16 +246,22 @@ public class ServerCommands {
                     category = "management";
                 }
 
-                public void run(Context ctx) throws IOException {
-//                    for (Staff staff : adminRepository.findAll()) {
-//                        staff.setAvatarUrl(SystemBot.api.getUserById(staff.getUserId()).get().getAvatar().getUrl().toString());
-//                        adminRepository.save(staff);
-//                    }
-                    Process process = Runtime.getRuntime().exec("cd " + webRoot + " && git pull");
-                    printResults(process, ctx);
+                public void run(Context ctx) {
+                    try {
+                        for (Staff staff : staffRepository.findAll()) {
+                            staff.setAvatarUrl(SystemBot.api.getUserById(staff.getUserId()).get().getAvatar().getUrl().toString());
+                            staffRepository.save(staff);
+                        }
+                    } catch (Exception e) {
+                        ctx.channel.sendMessage(new EmbedBuilder()
+                                .setTitle("Error")
+                                .setDescription("There was an error while updating the profile pictures: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()))
+                                .setColor(new Color(0xff0000)));
+                    }
+                    GoodWindowsExec.execute(new String[]{"cd " + webRoot + "&& git pull"}, ctx);
                     ctx.channel.sendMessage(new EmbedBuilder()
                             .setTitle("Success")
-                            .setDescription("Successfully updated content of the website database.")
+                            .setDescription("Successfully updated content of the website.")
                             .setColor(new Color(0x00ff00)));
                 }
             });

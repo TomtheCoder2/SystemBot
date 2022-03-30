@@ -6,12 +6,16 @@ import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import systembot.website.repositories.StaffRepository;
 
 import java.util.Optional;
 
 import static systembot.Utils.readJsonFile;
 
-
+@Component
 public class SystemBot {
 //    public static final File prefsFile = new File("prefs.properties");
 //    public static Net net = new Net();
@@ -30,9 +34,18 @@ public class SystemBot {
     public static String serverName = "<untitled>";
     public static JSONObject data; //token, channel_id, role_id
     public static String apiToken = "";
+    public static String webRoot;
+    public static StaffRepository staffRepository;
     private static JSONObject alldata;
-
     private final long CDT = 300L;
+
+    @Autowired
+    public SystemBot(@Value("${spring.thymeleaf.prefix}") String inputWebRoot, StaffRepository inStaffRepository) {
+        webRoot = inputWebRoot.replace("file:", "");
+        System.out.printf("loaded webRoot: %s\n", webRoot);
+        staffRepository = inStaffRepository;
+        main(new String[]{});
+    }
 
     // register event handlers and create variables in the constructor
     public static void main(String[] args) {

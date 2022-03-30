@@ -4,15 +4,18 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import systembot.discordcommands.Context;
+import systembot.website.entity.Staff;
 
 import java.awt.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static systembot.SystemBot.staffRepository;
 
 //import java.sql.*;
 
@@ -82,6 +85,50 @@ public class Utils {
             System.out.println(line);
             ctx.channel.sendMessage(line);
         }
+    }
+
+    public static Staff getStaffByString(String name, Context ctx) {
+        Staff target;
+        if (Pattern.compile("[0-9]+").matcher(name).matches()) { // id
+            long id = Long.parseLong(name);
+            Optional<Staff> targetOptional = Optional.empty();
+            try {
+                targetOptional = staffRepository.findById(Math.toIntExact(id));
+            } catch (Exception ignored) {
+            }
+            if (targetOptional.isPresent()) {
+                target = targetOptional.get();
+            } else { // search for discord id
+                targetOptional = staffRepository.findByUserId(id);
+                if (targetOptional.isPresent()) {
+                    target = targetOptional.get();
+                } else { // doesn't exist
+                    ctx.channel.sendMessage(new EmbedBuilder()
+                            .setTitle("Error")
+                            .setDescription("Could not find id `" + id + "`!")
+                            .setColor(new Color(0xff0000)));
+                    return null;
+                }
+            }
+        } else {
+            List<Staff> targetOptional = staffRepository.findByName(name);
+            if (targetOptional.isEmpty()) {
+                ctx.channel.sendMessage(new EmbedBuilder()
+                        .setTitle("Error")
+                        .setDescription("Could not find name `" + name + "`!")
+                        .setColor(new Color(0xff0000)));
+                return null;
+            }
+            target = targetOptional.get(0);
+        }
+        if (target == null) {
+            ctx.channel.sendMessage(new EmbedBuilder()
+                    .setTitle("Error")
+                    .setDescription("Could not find staff `" + name + "`!")
+                    .setColor(new Color(0xff0000)));
+            return null;
+        }
+        return target;
     }
 
 
