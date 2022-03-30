@@ -1,4 +1,4 @@
-package mindServ;
+package systembot.mindServ;
 
 import arc.*;
 import arc.files.*;

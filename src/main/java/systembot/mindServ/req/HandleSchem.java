@@ -1,18 +1,22 @@
-package mindServ.req;
+package systembot.mindServ.req;
 
 import arc.files.*;
 import arc.util.*;
 import arc.util.serialization.*;
-import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 import mindustry.game.*;
 
-import javax.imageio.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 
-import static mindServ.ContentHandler.schemHeader;
-import static mindServ.MindServ.*;
+import static systembot.mindServ.ContentHandler.schemHeader;
+import static systembot.mindServ.MindServ.*;
 
 public class HandleSchem implements HttpHandler{
     @Override

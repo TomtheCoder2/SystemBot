@@ -1,10 +1,12 @@
-package mindServ.req;
+package systembot.mindServ.req;
 
-import com.sun.net.httpserver.*;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import static mindServ.MindServ.emptyResponse;
+import static systembot.mindServ.MindServ.emptyResponse;
 
 public class HandleGet implements HttpHandler{
     @Override

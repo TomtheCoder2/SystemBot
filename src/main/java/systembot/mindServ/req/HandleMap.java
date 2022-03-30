@@ -1,15 +1,19 @@
-package mindServ.req;
+package systembot.mindServ.req;
 
-import arc.util.*;
-import arc.util.serialization.*;
-import com.sun.net.httpserver.*;
-import mindServ.*;
+import arc.util.Log;
+import arc.util.serialization.Base64Coder;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import systembot.mindServ.ContentHandler;
 
-import javax.imageio.*;
-import java.io.*;
-import java.util.*;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
-import static mindServ.MindServ.*;
+import static systembot.mindServ.MindServ.*;
 
 public class HandleMap implements HttpHandler {
     @Override

@@ -1,13 +1,19 @@
-package mindServ;
+package systembot.mindServ;
 
 import arc.util.*;
-import com.sun.net.httpserver.*;
-import mindServ.req.*;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import systembot.mindServ.req.HandleGet;
+import systembot.mindServ.req.HandleMap;
+import systembot.mindServ.req.HandleSchem;
 
-import java.io.*;
-import java.net.*;
-import java.nio.file.*;
-import java.util.concurrent.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class MindServ{
 

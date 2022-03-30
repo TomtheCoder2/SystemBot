@@ -22,6 +22,9 @@ repositories {
         url 'https://repo.clojars.org'
         name 'Clojars'
     }
+    maven{ url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven{ url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven{ url 'https://jitpack.io' }
 }
 
 frontend {
@@ -79,6 +82,8 @@ dependencies {
     // ssl cretifcate
     implementation 'com.github.valb3r.letsencrypt-helper:letsencrypt-helper-tomcat:0.2.4'
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '1.3.0.RELEASE'
+    implementation "com.github.Anuken.Arc:arc-core:db7090ae8a694b918a7bcdc3565deb8d2acf71ab"
+    implementation "com.github.Anuken.Mindustry:core:2ae7863caed3023d14140d2fe84723802d8f78ab"
 }
 
 jar {
