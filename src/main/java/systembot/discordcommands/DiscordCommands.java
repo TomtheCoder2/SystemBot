@@ -66,7 +66,11 @@ public class DiscordCommands implements MessageCreateListener {
      */
     public void onMessageCreate(MessageCreateEvent event) {
 //        System.out.printf("%s: %s\n", event.getMessageAuthor(), event.getMessageContent());
-        for (MessageCreatedListener listener : messageCreatedListenerRegistry) listener.run(event);
+        for (MessageCreatedListener listener : messageCreatedListenerRegistry) {
+            if (listener.run(event)) {
+                return;
+            }
+        }
 
         String message = event.getMessageContent();
         // check if it's a command
