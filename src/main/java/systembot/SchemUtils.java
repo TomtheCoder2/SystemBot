@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 
 import static arc.util.Log.debug;
 import static systembot.SystemBot.api;
-import static systembot.mindServ.MindServ.*;
+import static systembot.SystemBot.previewSchems;
+import static systembot.mindServ.MindServ.contentHandler;
 
 public class SchemUtils {
     /**
@@ -140,11 +141,13 @@ public class SchemUtils {
     }
 
     public void registerListeners(DiscordCommands handler) {
-        handler.registerOnMessage(new MessageCreatedListener() {
-            @Override
-            public boolean run(MessageCreateEvent messageCreateEvent) {
-                return checkIfSchem(messageCreateEvent);
-            }
-        });
+        if (previewSchems) {
+            handler.registerOnMessage(new MessageCreatedListener() {
+                @Override
+                public boolean run(MessageCreateEvent messageCreateEvent) {
+                    return checkIfSchem(messageCreateEvent);
+                }
+            });
+        }
     }
 }

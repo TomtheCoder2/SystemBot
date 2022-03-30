@@ -36,6 +36,7 @@ public class SystemBot {
     public static String apiToken = "";
     public static String webRoot;
     public static StaffRepository staffRepository;
+    public static Boolean previewSchems = true;
     private static JSONObject alldata;
     private final long CDT = 300L;
 
@@ -58,6 +59,10 @@ public class SystemBot {
             admin_bot_channel_id = alldata.getString("admin_bot_channel_id");
             suggestion_channel_id = alldata.getString("suggestion_channel_id");
             dev_roleid = alldata.getString("dev_roleid");
+
+            if (data.has("previewSchems")) {
+                previewSchems = data.getBoolean("previewSchems");
+            }
 
             if (data.has("token")) {
                 apiToken = data.getString("token");
