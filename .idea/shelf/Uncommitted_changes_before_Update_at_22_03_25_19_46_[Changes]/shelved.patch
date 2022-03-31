@@ -1,0 +1,45 @@
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.data.rest.base-path=/api\r\nspring.main.banner-mode=off\r\nlogging.level.org.springframework=ERROR\r\n#spring.jpa.hibernate.ddl-auto=none\r\nspring.sql.init.mode=never\r\nspring.sql.init.platform=postgres\r\nspring.datasource.url=jdbc:postgresql://localhost:5432/mindustrydata\r\nspring.datasource.username=postgres\r\nspring.datasource.password=Nautilus2021#\r\nspring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true\r\nspring.jpa.generate-ddl=false\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl\r\nserver.port=443\r\nspring.thymeleaf.cache=false\r\nlets-encrypt-helper.domain=phoenix-network.dev\r\nlets-encrypt-helper.contact=mailto:nautilus@phoenix-network.dev\r\nserver.ssl.key-store=file:C:/Users/janwi/mindustryServer/v7/mods/SystemBot/springboot.p12\r\n#server.ssl.key-store=file:/root/springboot/springboot.p12\r\nserver.ssl.key-store-password=password\r\nserver.ssl.key-alias=springboot\r\nserver.ssl.key-store-type=PKCS12\r\nserver.ssl.enabled=true\r\nspring.thymeleaf.prefix=file:C:/Users/janwi/mindustryServer/v7/mods/SystemBot/static_resources/templates/\r\nspring.thymeleaf.suffix=.html\r\nspring.thymeleaf.mode=HTML5\r\nspring.thymeleaf.encoding=UTF-8\r\nspring.web.resources.static-locations[0]=file:C:/Users/janwi/mindustryServer/v7/mods/SystemBot/static_resources/static/\r\n\r\nserver.error.path=/error
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+--- a/src/main/resources/application.properties	(revision 10c859980c56801df1fba5431758726de76b1e3d)
++++ b/src/main/resources/application.properties	(date 1648233838340)
+@@ -21,10 +21,10 @@
+ server.ssl.key-alias=springboot
+ server.ssl.key-store-type=PKCS12
+ server.ssl.enabled=true
+-spring.thymeleaf.prefix=file:C:/Users/janwi/mindustryServer/v7/mods/SystemBot/static_resources/templates/
++spring.thymeleaf.prefix=file:C:/Users/janwi/mindustryServer/v7/mods/phoenix-network-website/
+ spring.thymeleaf.suffix=.html
+ spring.thymeleaf.mode=HTML5
+ spring.thymeleaf.encoding=UTF-8
+-spring.web.resources.static-locations[0]=file:C:/Users/janwi/mindustryServer/v7/mods/SystemBot/static_resources/static/
++spring.web.resources.static-locations[0]=file:C:/Users/janwi/mindustryServer/v7/mods/phoenix-network-website/
+ 
+ server.error.path=/error
+\ No newline at end of file
+Index: src/main/resources/application_server.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>spring.data.rest.base-path=/api\r\nspring.main.banner-mode=off\r\nlogging.level.org.springframework=ERROR\r\n#spring.jpa.hibernate.ddl-auto=none\r\nspring.sql.init.mode=never\r\nspring.sql.init.platform=postgres\r\nspring.datasource.url=jdbc:postgresql://localhost:5432/mindustrydata\r\nspring.datasource.username=postgres\r\nspring.datasource.password=Nautilus2021#\r\nspring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true\r\nspring.jpa.generate-ddl=false\r\nspring.jpa.hibernate.ddl-auto=update\r\nspring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl\r\nserver.port=443\r\nspring.thymeleaf.cache=false\r\nlets-encrypt-helper.domain=phoenix-network.dev\r\nlets-encrypt-helper.contact=mailto:nautilus@phoenix-network.dev\r\nserver.ssl.key-store=file:/root/springboot/springboot.p12\r\n#server.ssl.key-store=file:/root/springboot/springboot.p12\r\nserver.ssl.key-store-password=password\r\nserver.ssl.key-alias=springboot\r\nserver.ssl.key-store-type=PKCS12\r\nserver.ssl.enabled=true\r\nspring.thymeleaf.prefix=file:/root/springboot/static_resources/templates/\r\nspring.thymeleaf.suffix=.html\r\nspring.thymeleaf.mode=HTML5\r\nspring.thymeleaf.encoding=UTF-8\r\nspring.web.resources.static-locations[0]=file:/root/springboot/static_resources/static/\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/src/main/resources/application_server.properties b/src/main/resources/application_server.properties
+--- a/src/main/resources/application_server.properties	(revision 10c859980c56801df1fba5431758726de76b1e3d)
++++ b/src/main/resources/application_server.properties	(date 1648233969193)
+@@ -21,8 +21,8 @@
+ server.ssl.key-alias=springboot
+ server.ssl.key-store-type=PKCS12
+ server.ssl.enabled=true
+-spring.thymeleaf.prefix=file:/root/springboot/static_resources/templates/
++spring.thymeleaf.prefix=file:/root/springboot/static_resources/Phoenix-Network-Website/
+ spring.thymeleaf.suffix=.html
+ spring.thymeleaf.mode=HTML5
+ spring.thymeleaf.encoding=UTF-8
+-spring.web.resources.static-locations[0]=file:/root/springboot/static_resources/static/
++spring.web.resources.static-locations[0]=file:/root/springboot/static_resources/Phoenix-Network-Website/
