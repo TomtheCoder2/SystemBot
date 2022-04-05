@@ -23,8 +23,21 @@ class StreamGobbler extends Thread {
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             String line;
-            while ((line = br.readLine()) != null)
-                ctx.channel.sendMessage("`" + type + ">" + line + "`");
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                if (line.equals("")) continue;
+                if (2000 < sb.length() + type.length() + 10 + line.length()) {
+                    sb.append("`");
+                    ctx.channel.sendMessage("`" + sb);
+                    System.out.println("sent message. length: " + sb.length());
+                    sb = new StringBuilder();
+                }
+                sb.append("\n").append(type).append(">").append(line);
+            }
+            if (sb.length() > 0) {
+                sb.append("`");
+                ctx.channel.sendMessage("`" + sb);
+            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

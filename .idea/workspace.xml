@@ -4,9 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="985e0ab3-d881-4e31-8d81-27c0e8a1309e" name="Changes" comment="added schem preview">
+    <list default="true" id="985e0ab3-d881-4e31-8d81-27c0e8a1309e" name="Changes" comment="settings">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/BotThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/ComCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/ComCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/GoodWindowsExec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/GoodWindowsExec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/SchemUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/SchemAndMapsUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/SystemBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/SystemBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/DiscordCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/DiscordCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/mindServ/req/HandleMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/mindServ/req/HandleMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/website/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/website/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/website/controller/StaffIndexController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/website/controller/StaffIndexController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -302,7 +312,8 @@
       <workItem from="1648399425062" duration="5006000" />
       <workItem from="1648414790355" duration="592000" />
       <workItem from="1648484865317" duration="5757000" />
-      <workItem from="1648659146857" duration="9007000" />
+      <workItem from="1648659146857" duration="17097000" />
+      <workItem from="1648890387898" duration="7522000" />
     </task>
     <task id="LOCAL-00001" summary="added settings.json to the gitignore so my token doesnt get public">
       <created>1642711582630</created>
@@ -395,7 +406,14 @@
       <option name="project" value="LOCAL" />
       <updated>1648674506060</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="settings">
+      <created>1648715393435</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1648715393435</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -437,7 +455,8 @@
     <MESSAGE value=".gitignore" />
     <MESSAGE value="website" />
     <MESSAGE value="added schem preview" />
-    <option name="LAST_COMMIT_MESSAGE" value="added schem preview" />
+    <MESSAGE value="settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="settings" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SystemBot$Main.ic" NAME="Main Coverage Results" MODIFIED="1648663323255" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

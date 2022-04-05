@@ -2,10 +2,12 @@ package systembot;
 
 import arc.files.Fi;
 import arc.struct.Seq;
+import arc.util.Log;
 import mindustry.game.Schematic;
 import mindustry.game.Schematics;
 import mindustry.type.ItemSeq;
 import mindustry.type.ItemStack;
+import org.apache.commons.io.IOUtils;
 import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -14,24 +16,21 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import systembot.discordcommands.Context;
 import systembot.discordcommands.DiscordCommands;
 import systembot.discordcommands.MessageCreatedListener;
+import systembot.mindServ.ContentHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static arc.util.Log.debug;
-import static systembot.SystemBot.api;
-import static systembot.SystemBot.previewSchems;
+import static systembot.SystemBot.*;
 import static systembot.mindServ.MindServ.contentHandler;
 
-public class SchemUtils {
+public class SchemAndMapsUtils {
     /**
      * Send a schematic to channel of the ctx
      */
@@ -67,6 +66,37 @@ public class SchemUtils {
             // crate the .msch file
             schemFile = new Fi("temp/" + "file_" + schem.name().replaceAll("[^a-zA-Z0-9\\.\\-]", "_") + ".msch");
             Schematics.write(schem, schemFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        eb.setImage("attachment://" + imageFile.getName());
+        MessageBuilder mb = new MessageBuilder();
+        mb.addEmbed(eb);
+        mb.addAttachment(imageFile);
+        mb.addAttachment(schemFile.file());
+        mb.send(ctx.channel);
+    }
+
+    /**
+     * Send a map to channel of the ctx
+     */
+    public static void sendMap(ContentHandler.Map map, Context ctx, InputStream data) {
+        EmbedBuilder eb = new EmbedBuilder()
+                .setColor(new Color(0x00ffff))
+                .setAuthor(ctx.author)
+                .setTitle(map.name);
+        eb.setDescription(map.description);
+
+        // preview map
+        File imageFile;
+        Fi schemFile;
+        try {
+            imageFile = new File("temp/" + "image_" + map.name.replaceAll("[^a-zA-Z0-9\\.\\-]", "_") + ".png");
+            ImageIO.write(map.image, "png", imageFile);
+            // crate the .msch file
+            schemFile = new Fi("temp/" + "file_" + map.name.replaceAll("[^a-zA-Z0-9\\.\\-]", "_") + ".msch");
+            schemFile.writeBytes(data.readAllBytes());
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -140,12 +170,61 @@ public class SchemUtils {
         return false;
     }
 
+    public static boolean checkIfMap(MessageCreateEvent event) {
+        // ========= check if it's a map file ============
+        // download all files
+        Seq<MessageAttachment> ml = new Seq<>();
+        Seq<MessageAttachment> txtData = new Seq<>();
+        for (MessageAttachment ma : event.getMessageAttachments()) {
+            if ((ma.getFileName().split("\\.", 2)[1].trim().equals("msav")) && !event.getMessageAuthor().isBotUser()) { // check if its a .msav file
+                ml.add(ma);
+            }
+        }
+
+        if (ml.size > 0) {
+            try {
+                InputStream data =  ml.get(0).downloadAsInputStream();
+//                Log.info("file size: @", data.readAllBytes().length);
+                ContentHandler.Map map = contentHandler.readMap(data);
+                sendMap(map, new Context(event, null, null), data);
+                return true;
+            } catch (Exception e) {
+                event.getChannel().sendMessage(new EmbedBuilder().setTitle(e.getMessage()).setColor(new Color(0xff0000)));
+                e.printStackTrace();
+            }
+        }
+
+        if (txtData.size > 0) {
+            CompletableFuture<byte[]> cf = txtData.get(0).downloadAsByteArray();
+            try {
+                byte[] data = cf.get();
+                String base64Encoded = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(data)))
+                        .lines().parallel().collect(Collectors.joining("\n"));
+                Schematic schem = contentHandler.parseSchematic(base64Encoded);
+                sendSchem(schem, new Context(event, null, null));
+                return true;
+            } catch (Exception e) {
+                event.getChannel().sendMessage(new EmbedBuilder().setTitle(e.getMessage()).setColor(new Color(0xff0000)));
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public void registerListeners(DiscordCommands handler) {
         if (previewSchems) {
             handler.registerOnMessage(new MessageCreatedListener() {
                 @Override
                 public boolean run(MessageCreateEvent messageCreateEvent) {
                     return checkIfSchem(messageCreateEvent);
+                }
+            });
+        }
+        if (previewMaps) {
+            handler.registerOnMessage(new MessageCreatedListener() {
+                @Override
+                public boolean run(MessageCreateEvent messageCreateEvent) {
+                    return checkIfMap(messageCreateEvent);
                 }
             });
         }

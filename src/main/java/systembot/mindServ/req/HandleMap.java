@@ -26,9 +26,6 @@ public class HandleMap implements HttpHandler {
         }
 
         InputStream data = ex.getRequestBody();
-        Log.info(ex.getRequestBody().readAllBytes().length);
-        Log.info(data);
-        Log.info("file size: @", data.readAllBytes().length);
         ContentHandler.Map map = contentHandler.readMap(data);
 
         Log.info(map.author);

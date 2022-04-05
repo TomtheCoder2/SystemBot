@@ -246,6 +246,7 @@ public class ComCommands {
             {
                 help = "Display all available commands and their usage.";
                 usage = "[command]";
+                aliases.add("h");
             }
 
             public void run(Context ctx) {

@@ -133,6 +133,7 @@ public class ServerCommands {
                     role = adminRole;
                     usage = "<id>";
                     category = "management";
+                    aliases.add("a");
                 }
 
                 @Override
@@ -155,6 +156,7 @@ public class ServerCommands {
                     role = adminRole;
                     usage = "<id> <reason>";
                     category = "management";
+                    aliases.add("r");
                 }
 
                 @Override
@@ -183,6 +185,7 @@ public class ServerCommands {
                     role = devRole;
                     usage = "<v7, v7-mod, music> [map name] [mode]";
                     category = "management";
+                    aliases.add("s");
                 }
 
                 public void run(Context ctx) {
@@ -244,6 +247,7 @@ public class ServerCommands {
                     role = devRole;
                     usage = "";
                     category = "management";
+                    aliases.add("r");
                 }
 
                 public void run(Context ctx) {
@@ -314,6 +318,7 @@ public class ServerCommands {
                     role = devRole;
                     usage = "<v7, v7-mod, music> [warn players (true|false)]";
                     category = "management";
+                    aliases.add("rs");
                 }
 
                 public void run(Context ctx) {

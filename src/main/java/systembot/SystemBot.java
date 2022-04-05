@@ -37,6 +37,7 @@ public class SystemBot {
     public static String webRoot;
     public static StaffRepository staffRepository;
     public static Boolean previewSchems = true;
+    public static Boolean previewMaps = true;
     private static JSONObject alldata;
     private final long CDT = 300L;
 
@@ -62,6 +63,10 @@ public class SystemBot {
 
             if (data.has("previewSchems")) {
                 previewSchems = data.getBoolean("previewSchems");
+            }
+
+            if (data.has("previewMaps")) {
+                previewSchems = data.getBoolean("previewMaps");
             }
 
             if (data.has("token")) {
