@@ -3,6 +3,7 @@ package systembot;
 import org.javacord.api.DiscordApi;
 import org.json.JSONObject;
 import systembot.discordcommands.DiscordCommands;
+import systembot.discordcommands.listeners.ActionListener;
 
 public class BotThread extends Thread {
     public DiscordApi api;
@@ -15,12 +16,15 @@ public class BotThread extends Thread {
      * @param mt the main Thread
      * @param data the data from settings.json
      * */
-    public BotThread(DiscordApi api, Thread mt, JSONObject data) {
+    public BotThread(DiscordApi api, Thread mt, JSONObject data, boolean log) {
         this.api = api; //new DiscordApiBuilder().setToken(data.get(0)).login().join();
         this.mt = mt;
         this.data = data;
 
         // register commands
+        if (log) {
+            this.api.addListener(new ActionListener());
+        }
         this.api.addMessageCreateListener(commandHandler);
         new ComCommands().registerCommands(commandHandler);
         new ServerCommands(data).registerCommands(commandHandler);

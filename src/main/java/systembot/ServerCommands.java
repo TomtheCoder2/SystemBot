@@ -131,21 +131,26 @@ public class ServerCommands {
                 {
                     help = "Accept a form and send the congrats message";
                     role = adminRole;
-                    usage = "<id>";
+                    usage = "<mod|map> <id>";
                     category = "management";
                     aliases.add("a");
                 }
 
                 @Override
                 public void run(Context ctx) {
-                    System.out.println(SystemBot.api.getUserById(ctx.args[1]));
-                    SystemBot.api.getUserById(ctx.args[1]).join().sendMessage(new EmbedBuilder()
+                    String app = "";
+                    if (ctx.args[1].equalsIgnoreCase("mod")) {
+                        app = "Moderator";
+                    } else {
+                        app = "Map Reviewer";
+                    }
+                    SystemBot.api.getUserById(ctx.args[2]).join().sendMessage(new EmbedBuilder()
                             .setTitle("Congratulations!")
-                            .setDescription("Your Moderator application got accepted.\n" +
-                                    "Please ping or dm a Marshal (Staff) on the Phoenix-Network discord server")
-                            .setColor(new Color(0x00ff00)));
+                            .setDescription("Your **" + app + "** application got accepted.\n" +
+                                    "Please ping or dm a Marshal (Admin) on the Phoenix-Network discord server")
+                            .setColor(new Color(0x00ff00))).join();
                     ctx.channel.sendMessage(new EmbedBuilder()
-                            .setTitle("Successfully send message!")
+                            .setTitle("Successfully sent message!")
                             .setColor(new Color(0x00ff00)));
                 }
             });
@@ -154,27 +159,34 @@ public class ServerCommands {
                 {
                     help = "Reject a form and send the reject message";
                     role = adminRole;
-                    usage = "<id> <reason>";
+                    usage = "<mod|map> <id> <reason>";
                     category = "management";
                     aliases.add("r");
                 }
 
                 @Override
                 public void run(Context ctx) {
-                    if (ctx.args.length < 2) {
+                    if (ctx.args.length < 3) {
                         ctx.channel.sendMessage(new EmbedBuilder()
                                 .setTitle("Not enough Arguments")
                                 .setColor(new Color(0xff0000)));
                         return;
                     }
-                    System.out.println(SystemBot.api.getUserById(ctx.args[1]));
-                    SystemBot.api.getUserById(ctx.args[1]).join().sendMessage(new EmbedBuilder()
-                            .setTitle("Mod application denied!")
-                            .setDescription("Your Moderator application got denied.\n")
-                            .addField("Reason", ctx.message.split(" ", 2)[1])
-                            .setColor(new Color(0xff0000)));
+                    String app = "";
+                    if (ctx.args[1].equalsIgnoreCase("mod")) {
+                        app = "Moderator";
+                    } else {
+                        app = "Map Reviewer";
+                    }
+                    System.out.println(SystemBot.api.getUserById(ctx.args[2]));
+                    SystemBot.api.getUserById(ctx.args[2]).join().sendMessage(new EmbedBuilder()
+                            .setTitle(app + " application denied!")
+                            .setDescription("Your " + app + " application got denied.\n")
+                            .addField("Reason", ctx.message.split(" ").length > 2 ? ctx.message.split(" ", 3)[2] :
+                                    "No reason given", false)
+                            .setColor(new Color(0xff0000))).join();
                     ctx.channel.sendMessage(new EmbedBuilder()
-                            .setTitle("Successfully send message!")
+                            .setTitle("Successfully sent message!")
                             .setColor(new Color(0x00ff00)));
                 }
             });
@@ -266,6 +278,11 @@ public class ServerCommands {
                     ctx.channel.sendMessage(new EmbedBuilder()
                             .setTitle("Success")
                             .setDescription("Successfully updated content of the website.")
+                            .setColor(new Color(0x00ff00)));
+                    GoodWindowsExec.execute(new String[]{"cd ~/logs/phoenix_logs && sh saveLogs.sh"}, ctx);
+                    ctx.channel.sendMessage(new EmbedBuilder()
+                            .setTitle("Success")
+                            .setDescription("Successfully pushed all logs to the github repository.")
                             .setColor(new Color(0x00ff00)));
                 }
             });

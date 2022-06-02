@@ -30,6 +30,7 @@ public class SystemBot {
     public static String staff_bot_channel_id = null;
     public static String admin_bot_channel_id = null;
     public static String suggestion_channel_id = null;
+    public static String log_channel_id = null;
     public static String dev_roleid = null;
     public static String serverName = "<untitled>";
     public static JSONObject data; //token, channel_id, role_id
@@ -40,6 +41,7 @@ public class SystemBot {
     public static Boolean previewMaps = true;
     private static JSONObject alldata;
     private final long CDT = 300L;
+    public static boolean log = true;
 
     @Autowired
     public SystemBot(@Value("${spring.thymeleaf.prefix}") String inputWebRoot, StaffRepository inStaffRepository) {
@@ -60,6 +62,8 @@ public class SystemBot {
             admin_bot_channel_id = alldata.getString("admin_bot_channel_id");
             suggestion_channel_id = alldata.getString("suggestion_channel_id");
             dev_roleid = alldata.getString("dev_roleid");
+            log_channel_id =   alldata.getString("log_channel_id");
+            log = alldata.getBoolean("log");
 
             if (data.has("previewSchems")) {
                 previewSchems = data.getBoolean("previewSchems");
@@ -86,7 +90,7 @@ public class SystemBot {
         } catch (Exception e) {
             System.out.println("Couldn't log into discord.");
         }
-        BotThread bt = new BotThread(api, Thread.currentThread(), alldata);
+        BotThread bt = new BotThread(api, Thread.currentThread(), alldata, log);
         bt.setDaemon(false);
         bt.start();
 
