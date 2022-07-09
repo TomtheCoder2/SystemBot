@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.text.NumberFormat;
-import java.util.Random;
+import java.util.*;
 
 import static systembot.Pragati.*;
 import static systembot.Utils.percentageBar;
@@ -252,39 +252,30 @@ public class ComCommands {
             public void run(Context ctx) {
                 System.out.println("run command help!");
                 if (ctx.args.length == 1) {
-                    StringBuilder publicCommands = new StringBuilder();
-                    StringBuilder management = new StringBuilder();
-                    StringBuilder moderation = new StringBuilder();
-                    StringBuilder mapReviewer = new StringBuilder();
+                    HashMap<String, ArrayList<String>> categories = new HashMap<>();
 
+                    ArrayList<Command> commandList = new ArrayList<>(handler.getAllCommands());
+                    Collections.shuffle(commandList);
 
-                    for (Command command : handler.getAllCommands()) {
+                    for (Command command : commandList) {
                         if (command.hidden) continue;
-                        switch (command.category) {
-                            case "moderation" -> moderation.append("**").append(command.name).append("** ").append("\n");
-                            case "management" -> management.append("**").append(command.name).append("** ").append("\n");
-                            case "mapReviewer" -> mapReviewer.append("**").append(command.name).append("** ").append("\n");
-                            default -> publicCommands.append("**").append(command.name).append("** ").append("\n");
+                        if (!command.hasPermission(ctx)) continue;
+                        if (categories.containsKey(command.category)) {
+                            categories.get(command.category).add("**" + command.name + "**\n");
+                        } else {
+                            ArrayList<String> list = new ArrayList<>();
+                            list.add("**" + command.name + "**\n");
+                            categories.put(command.category, list);
                         }
                     }
-//                    EmbedBuilder embed = new EmbedBuilder()
-//                            .setTitle("Commands:")
-//                            .addField("**__Public:__**", (publicCommands.length() != 0 ? publicCommands.toString() : "No Public commands!"), true)
-//                            .addField("**__Moderation:__**", (moderation.length() != 0 ? moderation.toString() : "No Moderation commands!"), true)
-//                            .addField("**__Management:__**", (management.length() != 0 ? management.toString() : "No Management commands!"), true)
-//                            .addField("**__Map reviewer:__**", (mapReviewer.length() != 0 ? mapReviewer.toString() : "No Management commands!"), true);
-                    EmbedBuilder embed = new EmbedBuilder()
-                            .setTitle("Commands:");
-                    if (!publicCommands.isEmpty()) {
-                        embed.addField("**__Public:__**", publicCommands.toString(), true);
+                    EmbedBuilder embed = new EmbedBuilder();
+                    for (Map.Entry<String, ArrayList<String>> entry : categories.entrySet()) {
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : entry.getValue()) {
+                            sb.append(s);
+                        }
+                        embed.addField("**__" + entry.getKey() + ":__**", sb.toString(), true);
                     }
-                    if (!moderation.isEmpty()) {
-                        embed.addField("**__Moderation:__**", moderation.toString(), true);
-                    }
-                    if (!management.isEmpty()) {
-                        embed.addField("**__Management:__**", management.toString(), true);
-                    }
-
                     ctx.channel.sendMessage(embed);
                 } else {
                     EmbedBuilder embed = new EmbedBuilder();

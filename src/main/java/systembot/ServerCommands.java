@@ -1,6 +1,12 @@
 package systembot;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 import systembot.discordcommands.Command;
@@ -13,12 +19,11 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
+import static arc.util.Log.debug;
 import static systembot.SystemBot.*;
-import static systembot.Utils.getStaffByString;
+import static systembot.Utils.*;
 
 public class ServerCommands {
     private final TextChannel error_log_channel = getTextChannel("891677596117504020");
@@ -31,7 +36,7 @@ public class ServerCommands {
     public void registerCommands(DiscordCommands handler) {
         if (data.has("administrator_roleid")) {
             String adminRole = data.getString("administrator_roleid");
-            String devRole = data.getString("dev_roleid");
+            String devRole = dev_roleId;
 
             handler.registerCommand(new RoleRestrictedCommand("staff") {
                 {
@@ -191,18 +196,34 @@ public class ServerCommands {
                 }
             });
 
-            handler.registerCommand(new RoleRestrictedCommand("start") {
+            // server name, screen name
+//            636385.TheRealFast      (06/04/2022 10:19:48 AM)        (Detached)
+//                    2185902.be      (05/15/2022 04:56:43 PM)        (Detached)
+//                    196729.mod      (04/06/2022 05:40:32 PM)        (Detached)
+//                    2203.pvp-v7     (04/03/2022 08:22:12 PM)        (Detached)
+//                    2115.v7         (04/03/2022 08:21:09 PM)        (Detached)
+//                    1906.SystemBot  (04/03/2022 08:16:31 PM)        (Detached)
+            HashMap<String, String> servers = new HashMap();
+            servers.put("v7", "v7");
+            servers.put("mod", "mod");
+            servers.put("TheRealFast", "TheRealFast");
+            servers.put("be", "be");
+            servers.put("pvp", "pvp-v7");
+            StringBuilder allServerNames = new StringBuilder();
+            for (Map.Entry<String, String> s : servers.entrySet()) {
+                allServerNames.append(", ").append(s.getKey());
+            }
+            String allServers = allServerNames.toString().replaceFirst(", ", "");
+
+            handler.registerCommand(new RoleRestrictedCommand("stop") {
                 {
-                    help = "Start the v7-bot, v7-mod-bot or the buggy music bot";
-                    role = devRole;
-                    usage = "<v7, v7-mod, music> [map name] [mode]";
+                    help = "Stop a server";
+                    role = restart_roleId;
+                    usage = "<" + allServers + ">";
                     category = "management";
-                    aliases.add("s");
                 }
 
                 public void run(Context ctx) {
-                    String name = "";
-                    String mode = "";
                     if (ctx.args.length < 2) {
                         EmbedBuilder eb = new EmbedBuilder()
                                 .setTitle("Please select a bot first!")
@@ -210,36 +231,11 @@ public class ServerCommands {
                         ctx.channel.sendMessage(eb);
                         return;
                     }
-                    if (ctx.args.length >= 3) {
-                        name = ctx.args[2];
-                    }
-                    if (ctx.args.length == 4) {
-                        mode = ctx.args[3];
-                    }
+                    name = ctx.args[1];
                     try {
-                        String command = "";
-                        switch (ctx.args[1]) {
-                            case "v7" -> {
-//                                command = "bash -c \"screen -dmr v7 -X stuff $'sh autoRestart.sh\\nhost\\n'\"";
-                                command = "sh shellScripts/start/v7.sh " + name + " " + mode;
-                            }
-                            case "v7-mod" -> {
-//                                command = "bash -c \"screen -dmr v7-mod -X stuff $'sh autoRestart.sh\\nhost\\n'\"";
-                                command = "sh shellScripts/start/v7-mod.sh " + name + " " + mode;
-                            }
-                            case "music" -> {
-//                                command = "bash -c \"screen -dmr MusicBot -X stuff $'node index.js\\n'\"";
-                                command = "sh shellScripts/start/MusicBot.sh";
-                            }
-                            default -> {
-                                EmbedBuilder eb = new EmbedBuilder()
-                                        .setTitle("Please select a bot first!")
-                                        .setColor(Color.decode("#00ffff"));
-                                ctx.channel.sendMessage(eb);
-                                return;
-                            }
-                        }
-                        execute(ctx, command, "Started");
+                        if (checkIfServerExists(ctx, name, servers, allServers)) return;
+                        String command = "screen -S " + servers.get(name) + " -X stuff '^C\\r';";
+                        execute(ctx, command, "Stopped");
                     } catch (Exception error) {
                         EmbedBuilder eb = new EmbedBuilder()
                                 .setTitle("There was an error executing this command: " + name + "!")
@@ -252,6 +248,46 @@ public class ServerCommands {
                 }
             });
 
+            handler.registerCommand(new RoleRestrictedCommand("restart") {
+                {
+                    help = "Restart a server.";
+                    role = restart_roleId;
+                    usage = "<" + allServers + "> [map name] [mode]";
+                    category = "management";
+                    aliases.add("s");
+                    aliases.add("r");
+                }
+
+                public void run(Context ctx) {
+                    String name = "";
+                    if (ctx.args.length < 2) {
+                        EmbedBuilder eb = new EmbedBuilder()
+                                .setTitle("Please select a bot first!")
+                                .setColor(Color.decode("#00ffff"));
+                        ctx.channel.sendMessage(eb);
+                        return;
+                    }
+                    name = ctx.args[1];
+                    try {
+                        String command = "";
+                        if (checkIfServerExists(ctx, name, servers, allServers)) return;
+                        command = "screen -S " + servers.get(name) + " -X stuff 'say [scarlet]Server restart in 10 Seconds! All progress will be saved.\\rsave 1\\r';";
+                        command += "sleep 10;";
+                        command += "screen -S " + servers.get(name) + " -X stuff '^C\\r';";
+                        command += "screen -S " + servers.get(name) + " -X stuff 'ls\\rsh autoRestart.sh\\rstop\\rload 1\\r';";
+                        ctx.channel.sendMessage(new EmbedBuilder().setTitle("Restarting...").setDescription("**Command: **\n" + command));
+                        execute(ctx, command, "Restarted");
+                    } catch (Exception error) {
+                        EmbedBuilder eb = new EmbedBuilder()
+                                .setTitle("There was an error executing this command: " + name + "!")
+                                .setDescription(error.getStackTrace()[0].toString())
+                                .setColor(Color.decode("#ff0000"));
+                        ctx.channel.sendMessage(eb);
+                        assert error_log_channel != null;
+                        error_log_channel.sendMessage(eb);
+                    }
+                }
+            });
 
             handler.registerCommand(new RoleRestrictedCommand("reload") {
                 {
@@ -286,98 +322,82 @@ public class ServerCommands {
                             .setColor(new Color(0x00ff00)));
                 }
             });
+        }
 
-            handler.registerCommand(new RoleRestrictedCommand("stop") {
+        if (moderator_roleId != null) {
+            handler.registerCommand(new RoleRestrictedCommand("say") {
                 {
-                    help = "Stop the v7-bot, v7-mod-bot or the buggy music bot";
-                    role = devRole;
-                    usage = "<v7, v7-mod, music>";
+                    help = "Say something as the bot.";
+                    usage = "<channel> <message>";
+                    role = moderator_roleId;
                     category = "management";
                 }
 
+                @Override
                 public void run(Context ctx) {
-                    try {
-                        String command = "";
-                        switch (ctx.args[1]) {
-                            case "v7" -> {
-                                command = "sh shellScripts/stop/v7.sh";
+                    if (!Objects.equals(ctx.args[1], "edit")) {
+                        String channelName = ctx.args[1].replaceAll("<#", "").replaceAll(">", "");
+                        String message = ctx.message.split(" ", 2)[1];
+                        TextChannel channel = null;
+                        if (onlyDigits(channelName)) {
+                            channel = getTextChannel(channelName);
+                        } else {
+                            Collection<Channel> channels = api.getChannelsByName(channelName);
+                            if (!channels.isEmpty()) {
+                                channel = getTextChannel(String.valueOf(channels.stream().toList().get(0).getId()));
                             }
-                            case "v7-mod" -> {
-                                command = "sh shellScripts/stop/v7-mod.sh";
+                        }
+                        if (channel == null) {
+                            ctx.channel.sendMessage(new EmbedBuilder()
+                                    .setTitle("Error")
+                                    .setDescription("Could not find text channel " + channelName)
+                                    .setColor(new Color(0xff0000)));
+                            return;
+                        }
+                        if (!message.startsWith("```") && !message.startsWith("```json")) {
+                            channel.sendMessage(new EmbedBuilder().setTitle(message));
+                        } else {
+                            EmbedBuilder eb;
+                            try {
+                                message = message.replaceAll("```json", "").replaceAll("```", "");
+                                Gson gson = new GsonBuilder()
+                                        .setLenient()
+                                        .create();
+//                            debug(message);
+                                JsonElement element = gson.fromJson(message, JsonElement.class);
+                                JsonObject jsonObj = element.getAsJsonObject();
+
+                                eb = jsonToEmbed(jsonObj);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                ctx.channel.sendMessage(new EmbedBuilder()
+                                        .setTitle("Error")
+                                        .setColor(new Color(0xff0000))
+                                        .setDescription("There was an error while parsing the json object: \n" + e.getMessage()));
+                                return;
                             }
-                            case "music" -> {
-                                command = "sh shellScripts/stop/MusicBot.sh";
-                            }
-                            default -> {
-                                EmbedBuilder eb = new EmbedBuilder()
-                                        .setTitle("Please select a bot first!")
-                                        .setColor(Color.decode("#00ffff"));
-                                ctx.channel.sendMessage(eb);
+                            debug(eb.toString());
+                            try {
+                                channel.sendMessage(eb).get();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                ctx.channel.sendMessage(new EmbedBuilder()
+                                        .setTitle("Error")
+                                        .setColor(new Color(0xff0000))
+                                        .setDescription("There was an error while sending the message: \n" + e.getMessage()));
                                 return;
                             }
                         }
-                        execute(ctx, command, "Stopped");
-                    } catch (Exception error) {
-                        EmbedBuilder eb = new EmbedBuilder()
-                                .setTitle("There was an error executing this command: " + name + "!")
-                                .setDescription(error.getStackTrace()[0].toString())
-                                .setColor(Color.decode("#ff0000"));
-                        ctx.channel.sendMessage(eb);
-                        assert error_log_channel != null;
-                        error_log_channel.sendMessage(eb);
-                    }
-                }
-            });
-
-            handler.registerCommand(new RoleRestrictedCommand("restart") {
-                {
-                    help = "Restart the v7-bot, v7-mod-bot or the buggy music bot";
-                    role = devRole;
-                    usage = "<v7, v7-mod, music> [warn players (true|false)]";
-                    category = "management";
-                    aliases.add("rs");
-                }
-
-                public void run(Context ctx) {
-                    try {
-                        String command = "";
-                        switch (ctx.args[1]) {
-                            case "v7" -> {
-                                command = "sh shellScripts/restart/v7.sh";
-                                if (ctx.args.length > 2) {
-                                    if (Objects.equals(ctx.args[2], "true")) {
-                                        command = "sh shellScripts/restart/v7.alert.sh";
-                                    }
-                                }
-                            }
-                            case "v7-mod" -> {
-                                command = "sh shellScripts/restart/v7-mod.sh";
-                                if (ctx.args.length > 2) {
-                                    if (Objects.equals(ctx.args[2], "true")) {
-                                        command = "sh shellScripts/restart/v7-mod.alert.sh";
-                                    }
-                                }
-                            }
-                            case "music" -> {
-                                command = "sh shellScripts/restart/MusicBot.sh";
-                            }
-                            default -> {
-                                EmbedBuilder eb = new EmbedBuilder()
-                                        .setTitle("Please select a bot first!")
-                                        .setColor(Color.decode("#00ffff"));
-                                ctx.channel.sendMessage(eb);
-                                return;
-                            }
+                        ctx.channel.sendMessage(new EmbedBuilder()
+                                .setTitle("Successfully sent Message")
+                                .setDescription("Successfully sent message in channel: <#" + channel.getId() + ">")
+                                .setColor(new Color(0x00ff00)));
+                    } else {
+                        try {
+                            Message msg = api.getMessageById(ctx.args[2], getTextChannel(ctx.args[3].replaceAll("<#", "").replaceAll(">", ""))).get();
+                        } catch (Exception e) {
+                            ctx.channel.sendMessage(new EmbedBuilder().setTitle("Couldn't find this message " + ctx.args[2]).setColor(new Color(0xff0000)));
                         }
-                        execute(ctx, command, "Restarted");
-                    } catch (Exception error) {
-                        EmbedBuilder eb = new EmbedBuilder()
-                                .setTitle("There was an error executing this command: " + name + "!")
-                                .setDescription(error.getStackTrace()[0].toString())
-                                .setColor(Color.decode("#ff0000"));
-                        ctx.channel.sendMessage(eb);
-                        assert error_log_channel != null;
-                        error_log_channel.sendMessage(eb);
                     }
                 }
             });
@@ -397,17 +417,24 @@ public class ServerCommands {
                 ctx.channel.sendMessage(eb);
             }
         });
-        handler.registerCommand(new Command("shell") {
+        handler.registerCommand(new RoleRestrictedCommand("shell") {
             {
-                help = "execute a command in the sell";
+                help = "Execute a command in the sell";
                 hidden = true;
+                role = moderator_roleId;
             }
 
             public void run(Context ctx) {
                 // screen -r v7 -X stuff $'sh autoRestart.sh\nhost\n'
                 // screen -r v7 -X stuff $'^C'
+                String command = ctx.message;
+//                command = "screen -S v7 -X stuff 'echo Hello\\r'";
+                ctx.channel.sendMessage(new EmbedBuilder().setTitle("Executing Command:").setDescription("**Command(s):** \n" + command));
                 try {
-                    Process process = Runtime.getRuntime().exec("ping www.stackabuse.com");
+                    ProcessBuilder processBuilder = new ProcessBuilder();
+                    processBuilder.command("bash", "-c", command);
+//                    Process process = Runtime.getRuntime().exec(command);
+                    Process process = processBuilder.start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     String line = "";
                     while ((line = reader.readLine()) != null) {
@@ -420,6 +447,8 @@ public class ServerCommands {
                             .setColor(Color.decode("#ff0000"));
                     assert error_log_channel != null;
                     error_log_channel.sendMessage(eb);
+                    ctx.channel.sendMessage(eb);
+                    error.printStackTrace();
                 }
             }
         });
@@ -451,20 +480,35 @@ public class ServerCommands {
                 }
             }
         });
+    }
 
+    private boolean checkIfServerExists(Context ctx, String name, HashMap<String, String> servers, String allServers) {
+        if (Objects.equals(name, "")) {
+            ctx.channel.sendMessage(new EmbedBuilder()
+                    .setTitle("Error").setDescription("Please provide a server")
+                    .setColor(new Color(0xff0000)));
+            return true;
+        }
+        if (!servers.containsKey(name)) {
+            ctx.channel.sendMessage(new EmbedBuilder()
+                    .setTitle("Error").setDescription("Please provide a valid server\nValid Servers are: " + allServers)
+                    .setColor(new Color(0xff0000)));
+            return true;
+        }
+        return false;
     }
 
     private void execute(Context ctx, String command, String commandName) throws IOException {
-        Process process = Runtime.getRuntime().exec(command);
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", command);
+        Process process = processBuilder.start();
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         String line = "";
-//        StringBuilder output = new StringBuilder();
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
-//            output.append(line);
         }
         EmbedBuilder eb = new EmbedBuilder()
-                .setTitle(commandName + " the Bot " + ctx.args[1] + " successfully!")
+                .setTitle(commandName + " the server " + ctx.args[1] + " successfully!")
                 .setColor(Color.decode("#00ff00"));
         ctx.channel.sendMessage(eb);
     }

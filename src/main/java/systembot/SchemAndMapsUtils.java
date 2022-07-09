@@ -176,7 +176,7 @@ public class SchemAndMapsUtils {
         Seq<MessageAttachment> ml = new Seq<>();
         Seq<MessageAttachment> txtData = new Seq<>();
         for (MessageAttachment ma : event.getMessageAttachments()) {
-            if ((ma.getFileName().split("\\.", 2)[1].trim().equals("msav")) && !event.getMessageAuthor().isBotUser()) { // check if its a .msav file
+            if (ma.getFileName().split("\\.", 2)[1].trim().equals("msav") && !event.getMessageAuthor().isBotUser()) { // check if its a .msav file
                 ml.add(ma);
             }
         }

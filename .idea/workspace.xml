@@ -4,21 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="985e0ab3-d881-4e31-8d81-27c0e8a1309e" name="Changes" comment="staff">
-      <change afterPath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/listeners/Action.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/listeners/ActionListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/listeners/Utility.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="985e0ab3-d881-4e31-8d81-27c0e8a1309e" name="Changes" comment="updated some stuff idk">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5/storage_v2/_src_/database/mindustrydata.dde8Sw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5/storage_v2/_src_/database/mindustrydata.dde8Sw/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5/storage_v2/_src_/database/mindustrydata.dde8Sw/schema/pg_catalog.0S1ZNQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5/storage_v2/_src_/database/mindustrydata.dde8Sw/schema/pg_catalog.0S1ZNQ.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/BotThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/BotThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SystemBot-1.0.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/ComCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/ComCommands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/SchemAndMapsUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/SchemAndMapsUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/systembot/SystemBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/SystemBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/website/MvcConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/website/MvcConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/website/controller/StaffIndexController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/website/controller/StaffIndexController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,27 +191,6 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="SystemBot [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="dependencies" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="SystemBot [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -239,6 +214,11 @@
     </configuration>
     <configuration name="SystemBot-1.0.jar (1)" type="JarApplication" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/build/libs/SystemBot-1.0.jar" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2" />
+    </configuration>
+    <configuration name="SystemBot-1.0.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/SystemBot-1.0.jar" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <method v="2" />
     </configuration>
@@ -270,10 +250,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.SystemBot [bootJar]" />
+        <item itemvalue="JAR Application.SystemBot-1.0.jar" />
         <item itemvalue="JAR Application.SystemBot-1.0.jar (1)" />
         <item itemvalue="Gradle.SystemBot [jar]" />
         <item itemvalue="npm.watch" />
-        <item itemvalue="Gradle.SystemBot [dependencies]" />
       </list>
     </recent_temporary>
   </component>
@@ -325,6 +305,12 @@
       <workItem from="1649511884151" duration="46000" />
       <workItem from="1650214041170" duration="5882000" />
       <workItem from="1650296142682" duration="12602000" />
+      <workItem from="1654196235604" duration="8373000" />
+      <workItem from="1654800363968" duration="1202000" />
+      <workItem from="1655227734764" duration="1059000" />
+      <workItem from="1655230632800" duration="3272000" />
+      <workItem from="1657136754580" duration="611000" />
+      <workItem from="1657358634203" duration="5982000" />
     </task>
     <task id="LOCAL-00001" summary="added settings.json to the gitignore so my token doesnt get public">
       <created>1642711582630</created>
@@ -431,7 +417,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649189309805</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="updated some stuff idk">
+      <created>1654196480629</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1654196480629</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -474,7 +467,8 @@
     <MESSAGE value="added schem preview" />
     <MESSAGE value="settings" />
     <MESSAGE value="staff" />
-    <option name="LAST_COMMIT_MESSAGE" value="staff" />
+    <MESSAGE value="updated some stuff idk" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated some stuff idk" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SystemBot$Main.ic" NAME="Main Coverage Results" MODIFIED="1648663323255" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

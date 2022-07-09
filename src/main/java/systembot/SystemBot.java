@@ -31,7 +31,9 @@ public class SystemBot {
     public static String admin_bot_channel_id = null;
     public static String suggestion_channel_id = null;
     public static String log_channel_id = null;
-    public static String dev_roleid = null;
+    public static String restart_roleId = null;
+    public static String moderator_roleId = null;
+    public static String dev_roleId = null;
     public static String serverName = "<untitled>";
     public static JSONObject data; //token, channel_id, role_id
     public static String apiToken = "";
@@ -61,8 +63,10 @@ public class SystemBot {
             staff_bot_channel_id = alldata.getString("staff_bot_channel_id");
             admin_bot_channel_id = alldata.getString("admin_bot_channel_id");
             suggestion_channel_id = alldata.getString("suggestion_channel_id");
-            dev_roleid = alldata.getString("dev_roleid");
+            restart_roleId = alldata.getString("restart_roleId");
+            moderator_roleId = alldata.getString("moderator_roleid");
             log_channel_id =   alldata.getString("log_channel_id");
+            dev_roleId = alldata.getString("dev_roleid");
             log = alldata.getBoolean("log");
 
             if (data.has("previewSchems")) {

@@ -52,6 +52,7 @@ dependencies {
     implementation('org.javacord:javacord:3.4.0')
     compileOnly('javax.ws.rs:javax.ws.rs-api:2.1.1')
     implementation("net.dv8tion:JDA:4.3.0_277")
+    implementation 'com.google.code.gson:gson:2.9.0'
 
 
 
