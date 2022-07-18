@@ -101,7 +101,7 @@ public class DiscordCommands implements MessageCreateListener {
         // get the command to check the category
         Command command = registry.getOrDefault(name.toLowerCase(), aliasRegistry.get(name.toLowerCase()));
         // you can only run not public commands in #staff-bot and #admin-bot
-        if (!Objects.equals(command.category, "public")) {
+        if (!Objects.equals(command.category, "public") && !Objects.equals(command.name, "restart")) {
             if (event.getChannel().getId() != Long.parseLong(staff_bot_channel_id)
                     && event.getChannel().getId() != Long.parseLong(admin_bot_channel_id)) {
                 EmbedBuilder eb = new EmbedBuilder()

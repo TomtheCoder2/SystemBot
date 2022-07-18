@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.javacord.api.entity.channel.Channel;
+import org.javacord.api.entity.channel.ServerThreadChannelBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -468,9 +469,16 @@ public class ServerCommands {
                     eb.setColor(Color.decode("#ffff00"));
                     TextChannel suggestion_channel = getTextChannel(suggestion_channel_id);
                     assert suggestion_channel != null;
-                    suggestion_channel.sendMessage(eb);
+                    try {
+                        Message msg = suggestion_channel.sendMessage(eb).get();
+                        msg.addReactions("\u2705", "\u274C").get();
+                        new ServerThreadChannelBuilder(msg, ctx.author.getDisplayName() + "#" + ctx.author.getDiscriminator().get()).create().join();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     EmbedBuilder respond = new EmbedBuilder()
-                            .setTitle("Sent your suggestion in " + suggestion_channel.getType().name())
+                            .setTitle("New Suggestion!")
+                            .setDescription("<#" + suggestion_channel.getIdAsString() + ">")
                             .setColor(Color.decode("#00ff00"));
                     ctx.channel.sendMessage(respond);
                 } else {
