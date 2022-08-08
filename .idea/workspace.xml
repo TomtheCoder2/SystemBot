@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="985e0ab3-d881-4e31-8d81-27c0e8a1309e" name="Changes" comment="fixed restart stuff">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/100fd591-5d0f-4478-93f2-c091a2d9b3e5.xml" beforeDir="false" />
+    <list default="true" id="985e0ab3-d881-4e31-8d81-27c0e8a1309e" name="Changes" comment="add threads">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/DiscordCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/systembot/discordcommands/DiscordCommands.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,8 +72,8 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/main/resources/application.properties" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/systembot/ServerCommands.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JpbToolWindowState">
     <option name="myId2FirstActivated">
@@ -310,7 +306,8 @@
       <workItem from="1657358634203" duration="8211000" />
       <workItem from="1657374011115" duration="3476000" />
       <workItem from="1657725728976" duration="721000" />
-      <workItem from="1658176430788" duration="375000" />
+      <workItem from="1658176430788" duration="1003000" />
+      <workItem from="1659973729936" duration="412000" />
     </task>
     <task id="LOCAL-00001" summary="added settings.json to the gitignore so my token doesnt get public">
       <created>1642711582630</created>
@@ -431,7 +428,14 @@
       <option name="project" value="LOCAL" />
       <updated>1657364736330</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="add threads">
+      <created>1658177133235</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1658177133235</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -477,7 +481,8 @@
     <MESSAGE value="staff" />
     <MESSAGE value="updated some stuff idk" />
     <MESSAGE value="fixed restart stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed restart stuff" />
+    <MESSAGE value="add threads" />
+    <option name="LAST_COMMIT_MESSAGE" value="add threads" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/SystemBot$Main.ic" NAME="Main Coverage Results" MODIFIED="1648663323255" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

@@ -355,6 +355,13 @@ public class ServerCommands {
                                     .setColor(new Color(0xff0000)));
                             return;
                         }
+                        if (!channel.canSee(ctx.author.asUser().get()) || !channel.canWrite(ctx.author.asUser().get())) {
+                            ctx.channel.sendMessage(new EmbedBuilder()
+                                    .setTitle("Error")
+                                    .setDescription("You cant sent messages in <#" + channel.getIdAsString() + ">")
+                                    .setColor(new Color(0xff0000)));
+                            return;
+                        }
                         if (!message.startsWith("```") && !message.startsWith("```json")) {
                             channel.sendMessage(new EmbedBuilder().setTitle(message));
                         } else {
