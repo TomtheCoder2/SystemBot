@@ -17,7 +17,7 @@ import java.nio.file.Files;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-@Component
+//@Component
 public class MindServ {
     public static final String assets = "content/";
     public static final int port = 6969;

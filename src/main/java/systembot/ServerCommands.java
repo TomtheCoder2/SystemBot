@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.javacord.api.entity.channel.Channel;
-import org.javacord.api.entity.channel.ServerThreadChannelBuilder;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.json.JSONObject;
 import systembot.discordcommands.Command;
@@ -198,18 +198,13 @@ public class ServerCommands {
             });
 
             // server name, screen name
-//            636385.TheRealFast      (06/04/2022 10:19:48 AM)        (Detached)
-//                    2185902.be      (05/15/2022 04:56:43 PM)        (Detached)
-//                    196729.mod      (04/06/2022 05:40:32 PM)        (Detached)
-//                    2203.pvp-v7     (04/03/2022 08:22:12 PM)        (Detached)
-//                    2115.v7         (04/03/2022 08:21:09 PM)        (Detached)
-//                    1906.SystemBot  (04/03/2022 08:16:31 PM)        (Detached)
             HashMap<String, String> servers = new HashMap();
             servers.put("v7", "v7");
             servers.put("mod", "mod");
-            servers.put("TheRealFast", "TheRealFast");
+//            servers.put("TheRealFast", "TheRealFast");
             servers.put("be", "be");
-            servers.put("pvp", "pvp-v7");
+            servers.put("pvp", "pvp");
+            servers.put("beta", "beta");
             StringBuilder allServerNames = new StringBuilder();
             for (Map.Entry<String, String> s : servers.entrySet()) {
                 allServerNames.append(", ").append(s.getKey());
@@ -338,7 +333,34 @@ public class ServerCommands {
                 public void run(Context ctx) {
                     if (!Objects.equals(ctx.args[1], "edit")) {
                         String channelName = ctx.args[1].replaceAll("<#", "").replaceAll(">", "");
-                        String message = ctx.message.split(" ", 2)[1];
+                        String message = "";
+                        if (ctx.message.split(" ").length < 3) {
+                            // check if the message has .json or .txt files attached
+                            if (ctx.event.getMessageAttachments().size() > 0) {
+                                System.out.printf("Found %d attachments%n\n", ctx.event.getMessageAttachments().size());
+                                for (MessageAttachment attachment : ctx.event.getMessageAttachments()) {
+                                    if (attachment.getFileName().endsWith(".json") || attachment.getFileName().endsWith(".txt")) {
+                                        try {
+                                            message = String.valueOf(attachment.downloadAsByteArray());
+                                        } catch (Exception e) {
+                                            ctx.channel.sendMessage(new EmbedBuilder()
+                                                    .setTitle("Error")
+                                                    .setDescription("There was an error while downloading the file: " + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()))
+                                                    .setColor(new Color(0xff0000)));
+                                            return;
+                                        }
+                                    }
+                                }
+                            } else {
+                                ctx.channel.sendMessage(new EmbedBuilder()
+                                        .setTitle("Error")
+                                        .setDescription("Please provide a message.")
+                                        .setColor(new Color(0xff0000)));
+                                return;
+                            }
+                        } else {
+                            message = ctx.message.split(" ", 2)[1];
+                        }
                         TextChannel channel = null;
                         if (onlyDigits(channelName)) {
                             channel = getTextChannel(channelName);
@@ -403,6 +425,43 @@ public class ServerCommands {
                     } else {
                         try {
                             Message msg = api.getMessageById(ctx.args[2], getTextChannel(ctx.args[3].replaceAll("<#", "").replaceAll(">", ""))).get();
+                            String message = ctx.message.split(" ", 4)[3];
+                            if (!message.startsWith("```") && !message.startsWith("```json")) {
+                                msg.edit(new EmbedBuilder().setTitle(message));
+                            } else {
+                                EmbedBuilder eb;
+                                try {
+                                    message = message.replaceAll("```json", "").replaceAll("```", "");
+                                    Gson gson = new GsonBuilder()
+                                            .setLenient()
+                                            .create();
+                                    JsonElement element = gson.fromJson(message, JsonElement.class);
+                                    JsonObject jsonObj = element.getAsJsonObject();
+                                    eb = jsonToEmbed(jsonObj);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    ctx.channel.sendMessage(new EmbedBuilder()
+                                            .setTitle("Error")
+                                            .setColor(new Color(0xff0000))
+                                            .setDescription("There was an error while parsing the json object: \n" + e.getMessage()));
+                                    return;
+                                }
+                                debug(eb.toString());
+                                try {
+                                    msg.edit(eb).get();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    ctx.channel.sendMessage(new EmbedBuilder()
+                                            .setTitle("Error")
+                                            .setColor(new Color(0xff0000))
+                                            .setDescription("There was an error while editing the message: \n" + e.getMessage()));
+                                    return;
+                                }
+                            }
+                            ctx.channel.sendMessage(new EmbedBuilder()
+                                    .setTitle("Successfully sent Message")
+                                    .setDescription("Successfully edited message in channel: <#" + msg.getChannel().getId() + ">")
+                                    .setColor(new Color(0x00ff00)));
                         } catch (Exception e) {
                             ctx.channel.sendMessage(new EmbedBuilder().setTitle("Couldn't find this message " + ctx.args[2]).setColor(new Color(0xff0000)));
                         }
@@ -479,7 +538,7 @@ public class ServerCommands {
                     try {
                         Message msg = suggestion_channel.sendMessage(eb).get();
                         msg.addReactions("\u2705", "\u274C").get();
-                        new ServerThreadChannelBuilder(msg, ctx.author.getDisplayName() + "#" + ctx.author.getDiscriminator().get()).create().join();
+                        System.out.println(msg.createThread("Suggestion from " + ctx.author.getDiscriminatedName(), 24 * 60).get());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -2,12 +2,15 @@ package systembot;
 
 import arc.files.Fi;
 import arc.struct.Seq;
-import arc.util.Log;
+import arc.struct.StringMap;
+import arc.util.Strings;
+import arc.util.io.CounterInputStream;
 import mindustry.game.Schematic;
 import mindustry.game.Schematics;
+import mindustry.io.SaveIO;
+import mindustry.io.SaveVersion;
 import mindustry.type.ItemSeq;
 import mindustry.type.ItemStack;
-import org.apache.commons.io.IOUtils;
 import org.javacord.api.entity.emoji.KnownCustomEmoji;
 import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -25,6 +28,7 @@ import java.io.*;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.zip.InflaterInputStream;
 
 import static arc.util.Log.debug;
 import static systembot.SystemBot.*;
@@ -101,7 +105,7 @@ public class SchemAndMapsUtils {
             e.printStackTrace();
             return;
         }
-        eb.setImage("attachment://" + imageFile.getName());
+//        eb.setImage(ContentServer.renderMap(map));
         MessageBuilder mb = new MessageBuilder();
         mb.addEmbed(eb);
         mb.addAttachment(imageFile);
@@ -181,16 +185,46 @@ public class SchemAndMapsUtils {
             }
         }
 
+
         if (ml.size > 0) {
-            try {
-                InputStream data =  ml.get(0).downloadAsInputStream();
-//                Log.info("file size: @", data.readAllBytes().length);
-                ContentHandler.Map map = contentHandler.readMap(data);
-                sendMap(map, new Context(event, null, null), data);
-                return true;
-            } catch (Exception e) {
-                event.getChannel().sendMessage(new EmbedBuilder().setTitle(e.getMessage()).setColor(new Color(0xff0000)));
-                e.printStackTrace();
+            for (MessageAttachment ma : ml) {
+                byte[] data = ma.downloadAsByteArray().join();
+                if (!SaveIO.isSaveValid(new DataInputStream(new InflaterInputStream(new ByteArrayInputStream(data))))) {
+                    continue;
+                }
+//            try {
+//                InputStream data =  ml.get(0).downloadAsInputStream();
+////                Log.info("file size: @", data.readAllBytes().length);
+//                ContentHandler.Map map = contentHandler.readMap(data);
+//                sendMap(map, new Context(event, null, null), data);
+//                return true;
+//            } catch (Exception e) {
+//                event.getChannel().sendMessage(new EmbedBuilder().setTitle(e.getMessage()).setColor(new Color(0xff0000)));
+//                e.printStackTrace();
+//            }
+                StringMap meta;
+                try {
+                    CounterInputStream counter = new CounterInputStream(new InflaterInputStream(new ByteArrayInputStream(data)));
+                    DataInput stream = new DataInputStream(counter);
+                    SaveIO.readHeader(stream);
+
+                    int version = stream.readInt();
+                    SaveVersion ver = SaveIO.getSaveWriter(version);
+                    StringMap[] metaOut = {null};
+                    ver.region("meta", stream, counter, in -> metaOut[0] = ver.readStringMap(in));
+                    meta = metaOut[0];
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    event.getChannel().sendMessage(new EmbedBuilder().setTitle("Internal Error Try uploading again."));
+                    return false;
+                }
+                EmbedBuilder eb = new EmbedBuilder()
+                        .setTitle(Strings.stripColors(meta.get("name")))
+                        .setDescription(meta.get("description"))
+                        .setAuthor(event.getMessageAuthor().getDisplayName(), event.getMessageAuthor().getAvatar().getUrl().toString(), event.getMessageAuthor().getAvatar().getUrl().toString())
+                        .setImage(ContentServer.renderRaw(data))
+                        .addInlineField("Size", meta.getInt("width") + "x" + meta.getInt("height"));
+                event.getChannel().sendMessage(eb);
             }
         }
 
@@ -206,6 +240,7 @@ public class SchemAndMapsUtils {
             } catch (Exception e) {
                 event.getChannel().sendMessage(new EmbedBuilder().setTitle(e.getMessage()).setColor(new Color(0xff0000)));
                 e.printStackTrace();
+                return false;
             }
         }
         return false;
