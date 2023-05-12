@@ -202,9 +202,11 @@ public class ServerCommands {
             servers.put("v7", "v7");
             servers.put("mod", "mod");
 //            servers.put("TheRealFast", "TheRealFast");
-            servers.put("be", "be");
+//            servers.put("be", "be");
             servers.put("pvp", "pvp");
             servers.put("beta", "beta");
+            servers.put("map", "map");
+
             StringBuilder allServerNames = new StringBuilder();
             for (Map.Entry<String, String> s : servers.entrySet()) {
                 allServerNames.append(", ").append(s.getKey());
@@ -228,8 +230,16 @@ public class ServerCommands {
                         return;
                     }
                     name = ctx.args[1];
+
+                    }
                     try {
-                        if (checkIfServerExists(ctx, name, servers, allServers)) return;
+                    if (name = "all"){
+                        for (Map.Entry<String, String> entry : map.entrySet()) {
+                            String key = entry.getKey();
+                            String value = entry.getValue();
+                            System.out.println("Key=" + key + ", Value=" + value);
+                        }
+                    else if (checkIfServerExists(ctx, name, servers, allServers)) return;
                         String command = "screen -S " + servers.get(name) + " -X stuff '^C\\r';";
                         execute(ctx, command, "Stopped");
                     } catch (Exception error) {
