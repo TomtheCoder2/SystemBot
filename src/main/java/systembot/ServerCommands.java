@@ -201,6 +201,7 @@ public class ServerCommands {
             HashMap<String, String> servers = new HashMap();
             servers.put("v7", "v7");
             servers.put("mod", "mod");
+            servers.put("flood", "flood");
 //            servers.put("TheRealFast", "TheRealFast");
             servers.put("be", "be");
             servers.put("pvp", "pvp");
